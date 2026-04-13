@@ -23,3 +23,13 @@ void moveUpCursor(Buffer*buff);
 void moveDownCursor(Buffer*buff);
 void moveLeftCursor(Buffer*buff);
 void moveRightCursor(Buffer*buff);
+
+
+//dll.cpp
+DLL* newDLL();
+void push_front(DLL* dll,Line* line);
+void push_back(DLL* dll,Line* line);
+std::string pop_front(DLL* dll);
+std::string pop_back(DLL* dll);
+Line* back(DLL* dll);
+Line* front(DLL* dll);

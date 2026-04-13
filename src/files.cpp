@@ -10,17 +10,17 @@
 Buffer* FileToBuff(std::string filename){
     Buffer* buff = new Buffer;
     buff->filename = filename;
+    buff->dll = newDLL();
     std::ifstream file(filename); 
     std::string l;
-    int ln = 1;
+    int ln = 0;
     if (file.is_open()) { // Check if file opened successfully
         while (std::getline(file, l)) {
             Line* line = new Line;
             line->text = l; 
             line->col = l.size()+1;
-            line->cln = ln++;
-            // line->col = 0;
-            buff->dll.push_back(line);
+            ln++;
+            push_back(buff->dll,line);
         }
         file.close(); // Good practice to close
     } 
@@ -28,17 +28,19 @@ Buffer* FileToBuff(std::string filename){
         std::cerr << "Unable to open file" << std::endl;
     }
 
-    buff->ln = buff->dll.back()->cln;
-    buff->col = buff->dll.back()->col;
+    buff->ln = ln;
+    buff->col = back(buff->dll)->col;
     return buff;
 }
 
 void BuffToFile(Buffer* buff){
     std::ofstream file(buff->filename);
     int ln = 1;
-    for (Line* line : buff->dll)
+    Line* line = buff->dll->front;
+    while (line!=NULL)
     {
-            file << line->text +"\n";
+        file <<line->text +"\n";
+        line=line->next;
     }
     file.close(); 
 

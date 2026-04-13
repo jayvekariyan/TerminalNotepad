@@ -4,6 +4,7 @@
 #include "display.cpp"
 #include "raw.cpp"
 #include "files.cpp"
+#include "dll.cpp"
 
 // #pragma once
 

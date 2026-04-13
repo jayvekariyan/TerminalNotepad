@@ -7,14 +7,13 @@
 
 Buffer* newBuff(){
     Buffer* buff = new Buffer;
-    buff->col = 0;
     buff->ln = 0;
     return buff;
 }
 
 
 void UpdateBuff(Buffer* buff,char c){
-    Line* curr_line = buff->dll.back();
+    Line* curr_line = back(buff->dll);
     // buff->col = curr_line->col;
     // buff->ln = curr_line->cln;
     //When Backspace
@@ -24,12 +23,12 @@ void UpdateBuff(Buffer* buff,char c){
         {
             curr_line->text.erase(curr_line->col-2,1);
             curr_line->col--;
-            buff->col=curr_line->col;
+            buff->col = curr_line->col;
         }
-        else if(buff->dll.size()>1)
+        else if(buff->dll->size>1)
         {
-            buff->dll.pop_back();
-            buff->col = buff->dll.back()->col;
+            pop_back(buff->dll);
+            buff->col = back(buff->dll)->col;
             buff->ln--;
         }
         
@@ -42,8 +41,8 @@ void UpdateBuff(Buffer* buff,char c){
     else if ((int)c==13)
     {
         Line* line = new Line;
-        line->cln = buff->ln++;
-        buff->dll.push_back(line);
+        buff->ln++;
+        push_back(buff->dll,line);
         buff->col = line->col=1;
     }
     else if (c == '\x1b') {
@@ -89,9 +88,11 @@ void DisplayBuff(Buffer* buff){
     write(STDOUT_FILENO, header.c_str(), header.size());
     write(1, "\x1b[0m", 4); 
 
-    for (Line* line : buff->dll)
+    Line* line = buff->dll->front;
+    while (line!=NULL)
     {
         write(STDOUT_FILENO, (line->text+"\n").c_str(), line->text.size()+1);
+        line=line->next;
     }
     SetCursor(buff->ln+1,buff->col);
 }

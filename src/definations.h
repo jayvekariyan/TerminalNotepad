@@ -10,16 +10,22 @@
 // Lines
 struct Line{
     std::string text;
-    int cln;
+    Line* next;
+    Line* prev;
     int col;
+};
+
+struct DLL{
+    Line* front;
+    Line* back;
+    int size;
 };
 
 
 //Test buffer
 struct Buffer{
-    std::list <Line*> dll;
+    DLL* dll;
     std::string filename;
-    //cursor
     int ln;
     int col;
 };
