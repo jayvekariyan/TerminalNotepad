@@ -9,11 +9,13 @@
 // #pragma once
 
 
-int main() {
+int main(int argc, char* argv[]) {
     enableRawMode();
-    // Buffer* buff = newBuff();
+    std::string filename = argv[1];
     ClearScreen();
-    Buffer* buff = FileToBuff("myfile.txt");
+    Buffer* buff = FileToBuff(filename);
+    if (!buff) return 0;
+    
     DisplayBuff(buff);
     BuffToFile(buff);
     // SetCursor(1,1);
@@ -22,6 +24,7 @@ int main() {
     while (running) {
         running = readKey(buff,c);
     }
+    ClearScreen();
     return 0;
 }
 

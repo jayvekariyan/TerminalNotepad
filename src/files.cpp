@@ -27,6 +27,7 @@ Buffer* FileToBuff(std::string filename){
     } 
     else {
         std::cerr << "Unable to open file" << std::endl;
+        return NULL;
     }
 
     buff->ln = ln;
