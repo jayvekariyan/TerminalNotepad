@@ -14,15 +14,30 @@ void SetCursor(int x,int y){
 }
 
 void moveUpCursor(Buffer*buff){
+    if(buff->curr_line->prev){
+    buff->curr_line = buff->curr_line->prev;
     buff->ln--;
+    }
 }
 
 void moveDownCursor(Buffer*buff){
-    buff->ln++;
+    if (buff->curr_line->next)
+    {   
+        buff->curr_line = buff->curr_line->next;    
+        buff->ln++;
+    }
 }
 void moveLeftCursor(Buffer*buff){
+    if (buff->curr_line->col<=1)
+    {
+        return;
+    }
     buff->curr_line->col--;
 }
 void moveRightCursor(Buffer*buff){
+    if (buff->curr_line->col>=buff->curr_line->text.size())
+    {
+        return;
+    }
     buff->curr_line->col++;
 }
