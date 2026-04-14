@@ -25,9 +25,10 @@ struct DLL{
 //Test buffer
 struct Buffer{
     DLL* dll;
+    Line* curr_line;
     std::string filename;
     int ln;
-    int col;
+    // int col;
 };
 
 // Line* newLine(){

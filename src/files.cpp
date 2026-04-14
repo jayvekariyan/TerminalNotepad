@@ -21,6 +21,7 @@ Buffer* FileToBuff(std::string filename){
             line->col = l.size()+1;
             ln++;
             push_back(buff->dll,line);
+            buff->curr_line = line;
         }
         file.close(); // Good practice to close
     } 
@@ -29,7 +30,7 @@ Buffer* FileToBuff(std::string filename){
     }
 
     buff->ln = ln;
-    buff->col = back(buff->dll)->col;
+    // buff->col = back(buff->dll)->col;
     return buff;
 }
 

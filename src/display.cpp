@@ -21,8 +21,8 @@ void moveDownCursor(Buffer*buff){
     buff->ln++;
 }
 void moveLeftCursor(Buffer*buff){
-    buff->col--;
+    buff->curr_line->col--;
 }
 void moveRightCursor(Buffer*buff){
-    buff->col++;
+    buff->curr_line->col++;
 }
