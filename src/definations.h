@@ -1,6 +1,8 @@
 #include <iostream>
 #include <stdlib.h>
 #include <list>
+#include <termios.h>
+#include <unistd.h>
 
 #pragma once
 
@@ -24,10 +26,12 @@ struct DLL{
 
 //Test buffer
 struct Buffer{
-    DLL* dll;
+    Line* first_line;
+    Line* last_line;
     Line* curr_line;
     std::string filename;
     int ln;
+    int size;
     // int col;
 };
 

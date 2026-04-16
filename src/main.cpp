@@ -11,9 +11,9 @@
 
 int main(int argc, char* argv[]) {
     enableRawMode();
-    std::string filename = argv[1];
+    // std::string filename = argv[1];
     ClearScreen();
-    Buffer* buff = FileToBuff(filename);
+    Buffer* buff = FileToBuff("myfile.txt");
     if (!buff) return 0;
     
     DisplayBuff(buff);
@@ -27,9 +27,4 @@ int main(int argc, char* argv[]) {
     ClearScreen();
     return 0;
 }
-
-
-
-
-
 

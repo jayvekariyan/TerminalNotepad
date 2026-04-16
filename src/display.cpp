@@ -15,8 +15,8 @@ void SetCursor(int x,int y){
 
 void moveUpCursor(Buffer*buff){
     if(buff->curr_line->prev){
-    buff->curr_line = buff->curr_line->prev;
-    buff->ln--;
+        buff->curr_line = buff->curr_line->prev;
+        buff->ln--;
     }
 }
 
@@ -35,7 +35,7 @@ void moveLeftCursor(Buffer*buff){
     buff->curr_line->col--;
 }
 void moveRightCursor(Buffer*buff){
-    if (buff->curr_line->col>=buff->curr_line->text.size())
+    if (buff->curr_line->col>buff->curr_line->text.size())
     {
         return;
     }

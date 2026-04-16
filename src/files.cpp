@@ -8,19 +8,18 @@
 
 
 Buffer* FileToBuff(std::string filename){
-    Buffer* buff = new Buffer;
-    buff->filename = filename;
-    buff->dll = newDLL();
+    Buffer* buff = newBuff(filename);
+
     std::ifstream file(filename); 
-    std::string l;
+    std::string l = "";
     int ln = 0;
     if (file.is_open()) { // Check if file opened successfully
-        while (std::getline(file, l)) {
+        while (std::getline(file, l) || !buff->size) {
             Line* line = new Line;
             line->text = l; 
             line->col = l.size()+1;
-            ln++;
-            push_back(buff->dll,line);
+            buff->ln++;
+            insert_after_cl(buff,line);
             buff->curr_line = line;
         }
         file.close(); // Good practice to close
@@ -30,7 +29,7 @@ Buffer* FileToBuff(std::string filename){
         return NULL;
     }
 
-    buff->ln = ln;
+    
     // buff->col = back(buff->dll)->col;
     return buff;
 }
@@ -38,7 +37,7 @@ Buffer* FileToBuff(std::string filename){
 void BuffToFile(Buffer* buff){
     std::ofstream file(buff->filename);
     int ln = 1;
-    Line* line = buff->dll->front;
+    Line* line = buff->first_line;
     while (line!=NULL)
     {
         file <<line->text +"\n";

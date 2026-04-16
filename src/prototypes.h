@@ -31,5 +31,7 @@ void push_front(DLL* dll,Line* line);
 void push_back(DLL* dll,Line* line);
 std::string pop_front(DLL* dll);
 std::string pop_back(DLL* dll);
+void insert_after_cl(Buffer* buff,Line* new_line);
+std::string delete_cl(Buffer* buff);
 Line* back(DLL* dll);
 Line* front(DLL* dll);

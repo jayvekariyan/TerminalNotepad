@@ -1,96 +1,89 @@
 
 #include "prototypes.h"
 
-#include <termios.h>
-#include <unistd.h>
 // #include <stdlib.h>
 
-Buffer* newBuff(){
+Buffer* newBuff(std::string filename){
     Buffer* buff = new Buffer;
+    buff->filename = filename;
+    buff->curr_line = NULL;
+    buff->first_line = NULL;
+    buff->last_line = NULL;
     buff->ln = 0;
+    buff->size = 0;
     return buff;
 }
 
 
 void UpdateBuff(Buffer* buff,char c){
-    // Line* curr_line = back(buff->dll);
-    // buff->col = curr_line->col;
-    // buff->ln = curr_line->cln;
-    //When Backspace
-    if ((int)c==127)
-    {
-        if (buff->curr_line->text.size())
-        {
-            buff->curr_line->text.erase(buff->curr_line->col-2,1); //pop_back()
+    if (!buff->curr_line) return;
+
+    // when backspace
+    if ((int)c == 127) {
+        if (buff->curr_line->col > 1) {
+            buff->curr_line->text.erase(buff->curr_line->col - 2, 1);
             buff->curr_line->col--;
-            // buff->col = curr_line->col;
         }
-        else if(buff->dll->size>1)
-        {
-            pop_back(buff->dll);
-            buff->curr_line = back(buff->dll);
-            // buff->col = back(buff->dll)->col;
+        else if (buff->curr_line->prev) {
+            Line* curr = buff->curr_line;
+            Line* prev = buff->curr_line->prev;
+            prev->text += curr->text;
+            delete_cl(buff);
             buff->ln--;
         }
-        
         return;
     }
-    else if (c==CTRL_KEY('s'))
-    {
+
+    else if (c == CTRL_KEY('s')) {
         BuffToFile(buff);
     }
-    else if ((int)c==13)
-    {
+
+    // when enter
+    else if ((int)c == 13) {
         Line* line = new Line;
-        buff->ln++;
-        push_back(buff->dll,line);
+        line->text = "" + buff->curr_line->text.substr(buff->curr_line->col-1);
+        buff->curr_line->text.erase(buff->curr_line->col-1);
+        buff->curr_line->col = buff->curr_line->text.size()+1;
+        line->col = 1;
+
+        insert_after_cl(buff, line);
         buff->curr_line = line;
-        buff->curr_line->col=1;
+        buff->ln++;
     }
+
+    // ESC (ARROWS)
     else if (c == '\x1b') {
         char seq[2];
-        char str[] = "A";
-        write(STDOUT_FILENO,str,1);
 
-        read(STDIN_FILENO, &seq[0], 1) ;
-        read(STDIN_FILENO, &seq[1], 1) ;
-        if (seq[0] == '[' ) { //&& ((int)seq[1]<=68 && (int)seq[1]>=65
+        if (read(STDIN_FILENO, &seq[0], 1) != 1) return;
+        if (read(STDIN_FILENO, &seq[1], 1) != 1) return;
+
+        if (seq[0] == '[') {
             switch (seq[1]) {
-                
-                // moveCursor accordingly
-                case 'A': moveUpCursor(buff); break; // Up
-                case 'B': moveDownCursor(buff); break;// Down
-                case 'C': moveRightCursor(buff); break;// Right
-                case 'D': moveLeftCursor(buff); break;// Left
+                case 'A': moveUpCursor(buff); break;
+                case 'B': moveDownCursor(buff); break;
+                case 'C': moveRightCursor(buff); break;
+                case 'D': moveLeftCursor(buff); break;
             }
-
-        // else{
-
-        //     }
         }
     }
-    else if ( ((int)c<=127 && (int)c>=32)) 
-    {
-        // std::cout<<curr_line->text<<" "<<curr_line->col;
-        buff->curr_line->text.push_back(c);
-        // std::cout<<curr_line->text<<" "<<curr_line->col;
-        buff->curr_line->col++;
-        // buff->col=curr_line->col;
-    }
-    
-    
 
+    // NORMAL CHARACTER
+    else if (c >= 32 && c <= 126) {
+        buff->curr_line->text.insert(buff->curr_line->col - 1, 1, c);
+        buff->curr_line->col++;
+    }
 }
 
 void DisplayBuff(Buffer* buff){
 
     //change cursor position here using arrow keys
-    std::string header = "File: "+buff->filename +"      Ln "+std::to_string(buff->ln)+",Col "+ std::to_string(buff->curr_line->col) +"\n";
+    std::string header = "File: "+buff->filename +"      Ln "+std::to_string(buff->ln)+"/"+std::to_string(buff->size)+",Col "+ std::to_string(buff->curr_line->col)  +"\n";
     write(1, "\x1b[1;45m", 7); 
     write(STDOUT_FILENO, header.c_str(), header.size());
     write(1, "\x1b[0m", 4); 
 
-    Line* line = buff->dll->front;
+    Line* line = buff->first_line;
     while (line!=NULL)
     {
         write(STDOUT_FILENO, (line->text+"\n").c_str(), line->text.size()+1);
