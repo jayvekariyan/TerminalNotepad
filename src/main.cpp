@@ -5,6 +5,7 @@
 #include "raw.cpp"
 #include "files.cpp"
 #include "dll.cpp"
+#include "undo_redo.cpp"
 
 // #pragma once
 
@@ -24,7 +25,7 @@ int main(int argc, char* argv[]) {
     while (running) {
         running = readKey(buff,c);
     }
-    ClearScreen();
+    // ClearScreen();
     return 0;
 }
 

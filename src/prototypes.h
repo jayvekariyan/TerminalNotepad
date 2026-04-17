@@ -35,3 +35,11 @@ void insert_after_cl(Buffer* buff,Line* new_line);
 std::string delete_cl(Buffer* buff);
 Line* back(DLL* dll);
 Line* front(DLL* dll);
+
+//undo_redo.cpp
+void addAction(Buffer* buff,Action action);
+void undo(Buffer* buff);
+void redo(Buffer* buff);
+
+void deleteChar(Buffer* buff ,Action action); 
+void insertChar(Buffer* buff ,Action action);

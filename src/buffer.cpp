@@ -17,10 +17,13 @@ Buffer* newBuff(std::string filename){
 
 void UpdateBuff(Buffer* buff,char c){
     if (!buff->curr_line) return;
-
+    Action new_action = {buff->ln,buff->curr_line->col,c,buff->curr_line, INSERT};
     // when backspace
     if ((int)c == 127) {
         if (buff->curr_line->col > 1) {
+            new_action.data = buff->curr_line->text[buff->curr_line->col - 2];
+            new_action.type = DELETE;
+            addAction(buff,new_action);
             buff->curr_line->text.erase(buff->curr_line->col - 2, 1);
             buff->curr_line->col--;
         }
@@ -36,6 +39,15 @@ void UpdateBuff(Buffer* buff,char c){
 
     else if (c == CTRL_KEY('s')) {
         BuffToFile(buff);
+    }
+
+    else if (c == CTRL_KEY('z')) {
+        undo(buff);
+        
+    }
+
+    else if (c == CTRL_KEY('r')) {
+        redo(buff);
     }
 
     // when enter
@@ -72,6 +84,8 @@ void UpdateBuff(Buffer* buff,char c){
     else if (c >= 32 && c <= 126) {
         buff->curr_line->text.insert(buff->curr_line->col - 1, 1, c);
         buff->curr_line->col++;
+        new_action.c = buff->curr_line->col;
+        addAction(buff,new_action);
     }
 }
 
