@@ -43,3 +43,7 @@ void redo(Buffer* buff);
 
 void deleteChar(Buffer* buff ,Action action); 
 void insertChar(Buffer* buff ,Action action);
+
+void mergeLine(Buffer* buff,Action a);
+void splitLine(Buffer* buff,Action a);
+

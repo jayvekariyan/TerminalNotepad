@@ -24,13 +24,13 @@ struct DLL{
     int size;
 };
 
-enum ActionType { INSERT=1, DELETE=0 };
+enum ActionType { INSERT_CHAR=1, DELETE_CHAR=0,SPLIT_LINE=3, MERGE_LINE=2};  //,INSERT_LINE=5,DELETE_LINE=4
 //Action struct
 struct Action
 {
     int l;
     int c;
-    char data; //std::string data;
+    std::string data; //char data; 
     Line* line;
     ActionType type;
 };

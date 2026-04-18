@@ -17,12 +17,12 @@ Buffer* newBuff(std::string filename){
 
 void UpdateBuff(Buffer* buff,char c){
     if (!buff->curr_line) return;
-    Action new_action = {buff->ln,buff->curr_line->col,c,buff->curr_line, INSERT};
+    Action new_action = {buff->ln,buff->curr_line->col,std::string(1, c),buff->curr_line, INSERT_CHAR};
     // when backspace
     if ((int)c == 127) {
         if (buff->curr_line->col > 1) {
             new_action.data = buff->curr_line->text[buff->curr_line->col - 2];
-            new_action.type = DELETE;
+            new_action.type = DELETE_CHAR;
             addAction(buff,new_action);
             buff->curr_line->text.erase(buff->curr_line->col - 2, 1);
             buff->curr_line->col--;
@@ -33,6 +33,14 @@ void UpdateBuff(Buffer* buff,char c){
             prev->text += curr->text;
             delete_cl(buff);
             buff->ln--;
+
+            new_action.type = MERGE_LINE;
+            new_action.line = prev;
+            new_action.l = buff->ln;
+            new_action.c = prev->col;
+            // new_action.data = line->text;
+            addAction(buff,new_action);
+
         }
         return;
     }
@@ -53,7 +61,10 @@ void UpdateBuff(Buffer* buff,char c){
     // when enter
     else if ((int)c == 13) {
         Line* line = new Line;
-        line->text = "" + buff->curr_line->text.substr(buff->curr_line->col-1);
+        new_action.line = buff->curr_line;
+        new_action.l = buff->ln;
+        new_action.data = line->text;
+        line->text = buff->curr_line->text.substr(buff->curr_line->col-1);
         buff->curr_line->text.erase(buff->curr_line->col-1);
         buff->curr_line->col = buff->curr_line->text.size()+1;
         line->col = 1;
@@ -61,6 +72,12 @@ void UpdateBuff(Buffer* buff,char c){
         insert_after_cl(buff, line);
         buff->curr_line = line;
         buff->ln++;
+
+        new_action.type = SPLIT_LINE;
+        
+        
+    
+        addAction(buff,new_action);
     }
 
     // ESC (ARROWS)
