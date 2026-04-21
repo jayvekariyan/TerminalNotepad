@@ -18,6 +18,7 @@ Buffer* newBuff(std::string filename){
 void UpdateBuff(Buffer* buff,char c){
     if (!buff->curr_line) return;
     Action new_action = {buff->ln,buff->curr_line->col,std::string(1, c),buff->curr_line, INSERT_CHAR};
+    buff->status = "Unsaved";
     // when backspace
     if ((int)c == 127) {
         if (buff->curr_line->col > 1) {
@@ -46,6 +47,7 @@ void UpdateBuff(Buffer* buff,char c){
     }
 
     else if (c == CTRL_KEY('s')) {
+        buff->status = "Saved";
         BuffToFile(buff);
     }
 
@@ -109,8 +111,8 @@ void UpdateBuff(Buffer* buff,char c){
 void DisplayBuff(Buffer* buff){
 
     //change cursor position here using arrow keys
-    std::string header = "File: "+buff->filename +"      Ln "+std::to_string(buff->ln)+"/"+std::to_string(buff->size)+",Col "+ std::to_string(buff->curr_line->col)  +"\n";
-    write(1, "\x1b[1;45m", 7); 
+    std::string header = "File: "+buff->filename +"      Ln "+std::to_string(buff->ln)+"/"+std::to_string(buff->size)+",Col "+ std::to_string(buff->curr_line->col)+"     ["+buff->status  +"]\n";
+    write(1, "\x1b[1;44m", 7); 
     write(STDOUT_FILENO, header.c_str(), header.size());
     write(1, "\x1b[0m", 4); 
 

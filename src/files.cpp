@@ -8,12 +8,13 @@
 
 
 Buffer* FileToBuff(std::string filename){
-    Buffer* buff = newBuff(filename);
+    Buffer* buff;
 
     std::ifstream file(filename); 
     std::string l = "";
     int ln = 0;
     if (file.is_open()) { // Check if file opened successfully
+        buff = newBuff(filename);
         while (std::getline(file, l) || !buff->size) {
             Line* line = new Line;
             line->text = l; 
@@ -24,12 +25,13 @@ Buffer* FileToBuff(std::string filename){
         }
         file.close(); // Good practice to close
     } 
-    else {
-        std::cerr << "Unable to open file" << std::endl;
-        return NULL;
+    else { //Make new file if not exists
+        std::ofstream file(filename);
+        buff = FileToBuff(filename);
+        file.close();
     }
 
-    
+    buff->status="Saved";
     // buff->col = back(buff->dll)->col;
     return buff;
 }

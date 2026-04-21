@@ -42,6 +42,7 @@ struct Buffer{
     Line* last_line;
     Line* curr_line;
     std::string filename;
+    std::string status;
     std::stack<Action> undoStack;
     std::stack<Action> redoStack;
     int ln;

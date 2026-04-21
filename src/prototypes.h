@@ -12,7 +12,7 @@ Buffer* FileToBuff(std::string filename);
 void BuffToFile(Buffer* buff);
 
 // buffer.cpp
-Buffer* newBuff();
+Buffer* newBuff(std::string filename);
 void UpdateBuff(Buffer* buff,char c);
 void DisplayBuff(Buffer* buff);
 
