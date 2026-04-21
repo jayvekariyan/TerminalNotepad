@@ -7,7 +7,6 @@
 
 #pragma once
 
-
 #define CTRL_KEY(k) ((k) & 0x1f)
 
 // Lines
@@ -24,7 +23,7 @@ struct DLL{
     int size;
 };
 
-enum ActionType { INSERT_CHAR=1, DELETE_CHAR=0,SPLIT_LINE=3, MERGE_LINE=2};  //,INSERT_LINE=5,DELETE_LINE=4
+enum ActionType { INSERT_CHAR=1, DELETE_CHAR=0,SPLIT_LINE=3, MERGE_LINE=2}; 
 //Action struct
 struct Action
 {
@@ -47,10 +46,5 @@ struct Buffer{
     std::stack<Action> redoStack;
     int ln;
     int size;
-    // int col;
+
 };
-
-// Line* newLine(){
-//     Line* line = new Line;
-
-// }

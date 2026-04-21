@@ -1,10 +1,8 @@
-// #include"definations.h"
 #include "prototypes.h"
 
 #include<iostream>
 #include <fstream>
 #include <string>
-
 
 
 Buffer* FileToBuff(std::string filename){
@@ -32,7 +30,6 @@ Buffer* FileToBuff(std::string filename){
     }
 
     buff->status="Saved";
-    // buff->col = back(buff->dll)->col;
     return buff;
 }
 

@@ -1,11 +1,5 @@
-// #include "definations.h"
 #include "prototypes.h"
 
-#include <list>
-#include <termios.h>
-#include <unistd.h>
-#include <stdlib.h>
-#pragma once
 
 struct termios orig_termios;
 
@@ -23,7 +17,6 @@ void enableRawMode() {
     raw.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
     raw.c_lflag &= ~(ECHO | ICANON | IEXTEN | ISIG);
 
-    
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
 }
 

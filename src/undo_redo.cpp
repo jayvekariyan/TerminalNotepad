@@ -1,12 +1,8 @@
 #include "prototypes.h"
 
 
-// make new action at every time update buffer
-//
-
 void addAction(Buffer* buff,Action action){
     buff->undoStack.push(action);
-    // std::cout<<"act:"+std::to_string(action.data)+"|"+std::to_string(action.l)+"|"+std::to_string(action.c)+"|"+std::to_string(action.type)+" ";
     while (!buff->redoStack.empty())
     {
         buff->redoStack.pop();
@@ -38,7 +34,6 @@ void mergeLine(Buffer* buff,Action a){
     buff->curr_line = next;
     delete_cl(buff);
     //cursor
-
     buff->curr_line = curr;
     buff->ln = a.l;
 }
@@ -67,24 +62,19 @@ void undo(Buffer* buff){
     Action a = buff->undoStack.top();
     Action inverse;
     buff->undoStack.pop();
-    // std::cout<<"undo:"+std::to_string(a.data)+"|"+std::to_string(a.l)+"|"+std::to_string(a.c)+"|"+std::to_string(a.type)+" ";
-
+    
     if (a.type == INSERT_CHAR)
     {
         deleteChar(buff,a);
-        // inverse = {a.l, a.c, a.data, DELETE};
     } 
     else if (a.type == DELETE_CHAR) {
         insertChar(buff, a);
-        // inverse = {a.l, a.c, a.data, INSERT};
     }
     else if (a.type == SPLIT_LINE) {
         mergeLine(buff, a);
-        // inverse = {a.l, a.c, a.data, INSERT};
     }
     else if (a.type == MERGE_LINE) {
         splitLine(buff, a);
-        // inverse = {a.l, a.c, a.data, INSERT};
     }
     buff->redoStack.push(a);
     
@@ -97,26 +87,21 @@ void redo(Buffer* buff) {
     
     Action a = buff->redoStack.top();
     Action inverse;
-    // std::cout<<"redo:"+std::to_string(a.data)+"|"+std::to_string(a.l)+"|"+std::to_string(a.c)+"|"+std::to_string(a.type)+" ";
     
     buff->redoStack.pop();
 
     if (a.type == INSERT_CHAR){
         insertChar(buff, a);
-        // inverse = {a.l, a.c, a.data, DELETE};
         
     }
     else if (a.type == DELETE_CHAR){
         deleteChar(buff,a);
-        // inverse = {a.l, a.c, a.data, DELETE};
     }
     else if (a.type == SPLIT_LINE) {
         splitLine(buff, a);
-        // inverse = {a.l, a.c, a.data, INSERT};
     }
     else if (a.type == MERGE_LINE) {
         mergeLine(buff, a);
-        // inverse = {a.l, a.c, a.data, INSERT};
     }
 
     buff->undoStack.push(a);

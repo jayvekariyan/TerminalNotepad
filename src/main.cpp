@@ -7,8 +7,6 @@
 #include "dll.cpp"
 #include "undo_redo.cpp"
 
-// #pragma once
-
 
 int main(int argc, char* argv[]) {
     enableRawMode();
@@ -19,7 +17,7 @@ int main(int argc, char* argv[]) {
     
     DisplayBuff(buff);
     BuffToFile(buff);
-    // SetCursor(1,1);
+    
     char* c = new char;
     int running=1;
     while (running) {

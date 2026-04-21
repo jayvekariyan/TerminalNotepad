@@ -1,7 +1,5 @@
-
 #include "prototypes.h"
 
-// #include <stdlib.h>
 
 Buffer* newBuff(std::string filename){
     Buffer* buff = new Buffer;
@@ -39,7 +37,6 @@ void UpdateBuff(Buffer* buff,char c){
             new_action.line = prev;
             new_action.l = buff->ln;
             new_action.c = prev->col;
-            // new_action.data = line->text;
             addAction(buff,new_action);
 
         }
@@ -76,9 +73,6 @@ void UpdateBuff(Buffer* buff,char c){
         buff->ln++;
 
         new_action.type = SPLIT_LINE;
-        
-        
-    
         addAction(buff,new_action);
     }
 
@@ -109,8 +103,6 @@ void UpdateBuff(Buffer* buff,char c){
 }
 
 void DisplayBuff(Buffer* buff){
-
-    //change cursor position here using arrow keys
     std::string header = "File: "+buff->filename +"      Ln "+std::to_string(buff->ln)+"/"+std::to_string(buff->size)+",Col "+ std::to_string(buff->curr_line->col)+"     ["+buff->status  +"]\n";
     write(1, "\x1b[1;44m", 7); 
     write(STDOUT_FILENO, header.c_str(), header.size());
@@ -122,5 +114,6 @@ void DisplayBuff(Buffer* buff){
         write(STDOUT_FILENO, (line->text+"\n").c_str(), line->text.size()+1);
         line=line->next;
     }
+    // change cursor position
     SetCursor(buff->ln+1,buff->curr_line->col);
 }
