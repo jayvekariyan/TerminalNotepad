@@ -8,71 +8,64 @@ DLL* newDLL(){
     return dll;
 }
 
-void insert_after_cl(Buffer* buff,Line* new_line){
-    //If there is nothing
-    if (!buff->curr_line)
+void push_front(DLL* dll,Line* line){
+    if (dll->front==NULL)
     {
-        buff->curr_line = new_line;
-        buff->first_line = new_line;
-        buff->last_line = new_line;
-        buff->size++;
+        dll->back=dll->front=line;
+        dll->size++;
         return;
     }
-    //if next line is null
-    if (buff->curr_line->next==NULL)
+    line->next = dll->front;
+    dll->front->prev = line;
+    dll->front = line;
+    line->prev=NULL;
+    dll->size++;
+    
+}
+void push_back(DLL* dll,Line* line){
+    if (dll->back==NULL)
     {
-        new_line->next = NULL;
-        new_line->prev = buff->curr_line;
-        buff->curr_line->next = new_line;
-        buff->last_line = new_line;
-        buff->size++;
+        dll->back=dll->front=line;
+        dll->size++;
         return;
+    }
+    dll->back->next = line;
+    line->prev = dll->back;
+    dll->back = line;
+    line->next=NULL;
+    dll->size++;
+}
+std::string pop_front(DLL* dll){
+    if (dll->front==NULL)
+    {
+        return "Error Empty list";
     }
     
-    buff->curr_line->next->prev = new_line;
-    new_line->next = buff->curr_line->next;
-    buff->curr_line->next = new_line;
-    new_line->prev = buff->curr_line;
-    buff->size++;
-
+    Line* temp = dll->front;
+    std::string str = temp->text;
+    dll->front = dll->front->next;
+    if (dll->front!=NULL)
+    {
+        dll->front->prev = NULL;
+    }
+    dll->size--;
+    delete temp;
+    return str;
 }
+std::string pop_back(DLL* dll){
+    if (dll->back==NULL)
+    {
+        return "Error Empty list";
 
-std::string delete_cl(Buffer* buff) {
-    //if current line is empty
-    if (!buff->curr_line) {
-        return "Error: Empty buffer";
     }
-
-    Line* line = buff->curr_line;
-    std::string str = line->text;
-
-    // if ony one node
-    if (line->prev == NULL && line->next == NULL) {
-        buff->first_line = NULL;
-        buff->last_line = NULL;
-        buff->curr_line = NULL;
+    Line* temp = dll->back;
+    std::string str = temp->text;
+    dll->back = dll->back->prev;
+    if (dll->back!=NULL)
+    {
+        dll->back->next = NULL;
     }
-    // deleting first 
-    else if (line->prev == NULL) {
-        buff->first_line = line->next;
-        line->next->prev = NULL;
-        buff->curr_line = line->next;
-    }
-    // deleting last
-    else if (line->next == NULL) {
-        buff->last_line = line->prev;
-        line->prev->next = NULL;
-        buff->curr_line = line->prev;
-    }
-    // deleting from middle
-    else {
-        line->prev->next = line->next;
-        line->next->prev = line->prev;
-        buff->curr_line = line->prev; 
-    }
-
-    buff->size--;
-    delete line;
-
+    dll->size--;
+    delete temp;
     return str;
 }

@@ -1,8 +1,5 @@
 #include "prototypes.h"
 
-#include<iostream>
-#include <fstream>
-#include <string>
 
 
 Buffer* FileToBuff(std::string filename){

@@ -17,7 +17,7 @@ void DisplayBuff(Buffer* buff);
 
 // display.cpp
 void ClearScreen();
-void SetCursor(int ,int y);
+void SetCursor(int x,int y);
 void moveUpCursor(Buffer*buff);
 void moveDownCursor(Buffer*buff);
 void moveLeftCursor(Buffer*buff);

@@ -4,6 +4,8 @@
 #include <termios.h>
 #include <unistd.h>
 #include <stack>
+#include <fstream>
+#include <string>
 
 #pragma once
 

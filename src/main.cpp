@@ -4,6 +4,7 @@
 #include "display.cpp"
 #include "raw.cpp"
 #include "files.cpp"
+#include "lines.cpp"
 #include "dll.cpp"
 #include "undo_redo.cpp"
 
